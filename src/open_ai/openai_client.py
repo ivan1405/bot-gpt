@@ -30,8 +30,8 @@ class OpenAIClient:
         #    stop=[" Human:", " AI:"]
         #)
         response = openai.ChatCompletion.create(
-            model="gpt-4",
-            #model="gpt-3.5-turbo",
+            #model="gpt-4",
+            model="gpt-3.5-turbo",
             #max_tokens=150,
             temperature=0.8,
             messages=[

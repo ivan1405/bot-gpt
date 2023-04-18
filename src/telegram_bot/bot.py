@@ -1,12 +1,12 @@
 from functools import wraps
 
+
 class TelegramBot:
 
     def __init__(self, token):
         self.token = token
-        
-        
-@staticmethod
+
+
 def send_action(action):
     """Sends typing action while processing func command."""
 
