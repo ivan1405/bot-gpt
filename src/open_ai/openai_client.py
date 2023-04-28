@@ -19,21 +19,11 @@ class OpenAIClient:
             Returns:
                 str: The completion message returned by Chat-GPT
         """
-        #response = openai.Completion.create(
-        #    model="text-davinci-003",
-        #    prompt=message,
-        #    temperature=0.9,
-        #    max_tokens=150,
-        #    top_p=1,
-        #    frequency_penalty=0.0,
-        #    presence_penalty=0.6,
-        #    stop=[" Human:", " AI:"]
-        #)
         response = openai.ChatCompletion.create(
-            #model="gpt-4",
-            model="gpt-3.5-turbo",
+            model="gpt-4",
+            #model="gpt-3.5-turbo",
             #max_tokens=150,
-            temperature=0.8,
+            temperature=0.7,
             messages=[
                 {"role": "user", "content": message}
             ]
