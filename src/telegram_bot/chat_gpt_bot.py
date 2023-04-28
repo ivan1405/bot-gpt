@@ -14,14 +14,16 @@ from telegram.ext import (
 # https://github.com/jiaaro/pydub#installation
 from pydub import AudioSegment
 from open_ai.openai_client import OpenAIClient
+from eleven_labs.elevenlabs_client import ElevenLabsClient
 from telegram_bot.bot import TelegramBot, send_action
 
 
 class ChatGptBot(TelegramBot):
 
-    def __init__(self, token, openai_org, openai_key):
+    def __init__(self, token, openai_org, openai_key, eventlabs_key):
         super().__init__(token)
         self.openai = OpenAIClient(openai_org, openai_key)
+        self.elevenlabs = ElevenLabsClient(eventlabs_key)
         self.logger = self._init_logger()
 
     async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -81,6 +83,12 @@ class ChatGptBot(TelegramBot):
         text = ' '.join(context.args)
         response = self.openai.fix_spelling_mistakes(text=text)
         await context.bot.send_message(chat_id=update.effective_chat.id, text=response)
+         
+    @send_action(ChatAction.UPLOAD_VOICE)
+    async def talk(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        text = ' '.join(context.args)
+        self.elevenlabs.text_to_speech(text=text, voice_id='muoHqfmnhBQHMZQcC7Xf')
+        await context.bot.send_voice(chat_id=update.effective_chat.id, voice='tmp/elevenlabs/output.mp3')
 
     # supuestamente esto manda una imagen
 
@@ -109,6 +117,7 @@ class ChatGptBot(TelegramBot):
         application.add_handler(CommandHandler(
             'generate_image', self.generate_image))
         application.add_handler(CommandHandler('moderation', self.moderation))
+        application.add_handler(CommandHandler('talk', self.talk))
         application.add_handler(CommandHandler(
             'fix_spelling', self.fix_spelling))
 
